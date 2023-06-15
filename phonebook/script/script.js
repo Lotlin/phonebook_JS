@@ -235,6 +235,7 @@ const formButtons = [
       logo,
       btnAdd: buttonGroup.btns[0],
       formOverlay: form.overlay,
+      form: form.form,
     };
   };
 
@@ -255,7 +256,7 @@ const formButtons = [
   const init = (selectorApp, title) => {
     const app = document.querySelector(selectorApp);
     const phoneBook = renderPhoneBook(app, title);
-    const {list, logo, btnAdd, formOverlay} = phoneBook;
+    const {list, logo, btnAdd, formOverlay, form} = phoneBook;
 
     // функционал
 
@@ -270,6 +271,14 @@ const formButtons = [
     };
 
     btnAdd.addEventListener('click', objEvent);
+
+    form.addEventListener('click', event => {
+      event.stopPropagation();
+    });
+
+    formOverlay.addEventListener('click', () => {
+      formOverlay.classList.remove('is-visible');
+    });
   };
 
   window.phoneBookInit = init;
