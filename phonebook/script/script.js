@@ -1,28 +1,4 @@
 'use strict';
-
-const data = [
-  {
-    name: 'Иван',
-    surname: 'Петров',
-    phone: '+79514545454',
-  },
-  {
-    name: 'Игорь',
-    surname: 'Семёнов',
-    phone: '+79999999999',
-  },
-  {
-    name: 'Семён',
-    surname: 'Иванов',
-    phone: '+79800252525',
-  },
-  {
-    name: 'Мария',
-    surname: 'Попова',
-    phone: '+79876543210',
-  },
-];
-
 const mainButtons = [
   {
     className: 'btn btn-primary mr-3',
@@ -50,8 +26,30 @@ const formButtons = [
 ];
 
 {
+  const getStorage = (key = 'phoneBook') => {
+    let result;
+    if (localStorage.getItem(key)) {
+      result = JSON.parse(localStorage.getItem(key));
+    } else {
+      result = [];
+    }
+    return result;
+  };
+
+  const setStorage = (valueObject, key = 'phoneBook') => {
+    localStorage.setItem(key, JSON.stringify(valueObject));
+  };
+
+  const removeStorage = phone => {
+    const phoneBook = getStorage();
+    const newPhoneBook = phoneBook.filter(item => item.phone !== phone);
+    setStorage(newPhoneBook);
+  };
+
   const addContactData = contact => {
-    data.push(contact);
+    const phoneBook = getStorage();
+    phoneBook.push(contact);
+    setStorage(phoneBook);
   };
 
   const createContainer = () => {
@@ -151,7 +149,8 @@ const formButtons = [
       </div>
       <div class="form-group">
         <label class="form-label" for="phone">Телефон</label>
-        <input class="form-input" name="phone" id="phone" type="number">
+        <input class="form-input" name="phone" id="phone" 
+          type="number" required>
       </div>
     `);
 
@@ -184,6 +183,7 @@ const formButtons = [
 
     const tdPhone = document.createElement('td');
     const phoneLink = document.createElement('a');
+    phoneLink.classList.add('phone');
     phoneLink.href = `tel:${phone}`;
     phoneLink.textContent = phone;
     tr.phoneLink = phoneLink;
@@ -262,6 +262,9 @@ const formButtons = [
   const modalControl = (btnAdd, formOverlay) => {
     const openModal = () => {
       formOverlay.classList.add('is-visible');
+      document.querySelectorAll('.delete').forEach(del => {
+        del.classList.remove('is-visible');
+      });
     };
 
     const closeModal = () => {
@@ -294,6 +297,9 @@ const formButtons = [
       const target = e.target;
 
       if (target.closest('.del-icon')) {
+        const contact = target.closest('.contact');
+        const phone = contact.querySelector('.phone').textContent;
+        removeStorage(phone);
         target.closest('.contact').remove();
       }
     });
@@ -328,6 +334,7 @@ const formButtons = [
       form,
     } = renderPhoneBook(app, title);
 
+    const data = getStorage();
     // функционал
     const {closeModal} = modalControl(btnAdd, formOverlay);
     const allRow = renderContacts(list, data);
