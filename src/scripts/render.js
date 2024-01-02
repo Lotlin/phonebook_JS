@@ -8,9 +8,10 @@ import {
   createRow,
   createFooter,
   createCopyright,
-} from './createElements.js';
+  createImageLogo,
+} from './createElements';
 
-import mainButtons from './mainButtons.js';
+import mainButtons from './mainButtons';
 
 export const renderContacts = (elem, data) => {
   const allRow = data.map(createRow);
@@ -22,6 +23,7 @@ export const renderContacts = (elem, data) => {
 export const renderPhoneBook = (app, title) => {
   const header = createHeader();
   const logo = createLogo(title);
+  const imgLogo = createImageLogo();
   const main = createMain();
   const buttonGroup = createButtonGroup(mainButtons);
   const table = createTable();
@@ -30,7 +32,7 @@ export const renderPhoneBook = (app, title) => {
   const footer = createFooter();
   const copyright = createCopyright(title);
 
-  header.headerContainer.append(logo);
+  header.headerContainer.append(imgLogo, logo);
   main.mainContainer.append(buttonGroup.btnWrapper, table, overlay);
   footer.footerContainer.append(copyright);
   app.append(header, main, footer);

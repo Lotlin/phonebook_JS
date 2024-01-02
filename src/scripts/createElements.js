@@ -1,3 +1,12 @@
+import image from '../img/icon.svg';
+
+export const createImageLogo = () => {
+  const img = document.createElement('img');
+  img.src = image;
+
+  return img;
+};
+
 const formButtons = [
   {
     className: 'btn btn-primary mr-3',
@@ -32,7 +41,7 @@ export const createHeader = () => {
 export const createLogo = title => {
   const h1 = document.createElement('h1');
   h1.classList.add('logo');
-  h1.textContent = `Телефонный справочник ${title}`;
+  h1.textContent = `Телефонный справочник. ${title}`;
 
   return h1;
 };
